@@ -2,8 +2,12 @@
   "name": "the-secret-store-cli",
   "version": "0.1.0",
   "description": "The official CLI of The Secret Store",
-  "main": "dist/index.js",
+  "main": "./bin/index.js",
+  "bin": {
+    "tss": "./bin/index.js"
+  },
   "scripts": {
+    "dev": "tsc --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
