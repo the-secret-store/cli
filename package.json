@@ -1,0 +1,23 @@
+{
+  "name": "the-secret-store-cli",
+  "version": "0.1.0",
+  "description": "The official CLI of The Secret Store",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/the-secret-store/cli.git"
+  },
+  "author": "KrishnaMoorthy12",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/the-secret-store/cli/issues"
+  },
+  "homepage": "https://github.com/the-secret-store/cli#readme",
+  "devDependencies": {
+    "@types/node": "^16.10.5",
+    "typescript": "^4.4.4"
+  }
+}
