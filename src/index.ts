@@ -1,6 +1,7 @@
 #! /usr/bin/env node
 
 import { Command } from 'commander';
+import 'dotenv/config';
 import collection from './collection';
 
 const program = new Command('tss');
