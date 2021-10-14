@@ -9,8 +9,13 @@ interface ENVObjectType {
 export async function exposeEnvAsObject(rootDir: string): Promise<ENVObjectType> {
   let data: ENVObjectType = {};
 
-  // todo: handle no file error
-  const fileStream = fs.createReadStream(path.resolve(rootDir, '.env'));
+  const filePath = path.resolve(rootDir, '.env');
+
+  if (!fs.existsSync(filePath)) {
+    console.log('ENV does not exist locally.');
+  }
+
+  const fileStream = fs.createReadStream(filePath);
 
   const lines = readline.createInterface({
     input: fileStream,
@@ -24,6 +29,7 @@ export async function exposeEnvAsObject(rootDir: string): Promise<ENVObjectType>
     data[keyValuePair[0].trim()] = keyValuePair[1].trim();
   }
 
+  fileStream.close();
   return data;
 }
 
@@ -31,18 +37,8 @@ export function exportEnvFromObject(envAsObject: ENVObjectType, rootDir: string)
   const envFilePath = path.resolve(rootDir, '.env');
   const envFile = fs.createWriteStream(envFilePath);
   const content = Object.entries(envAsObject)
-    .map(([key, value]) => `${key}=${value}`)
+    .map(([key, value]) => `${key} = ${value}`)
     .join('\n');
-  // for (const key in envAsObject) {
-  //   if (Object.prototype.hasOwnProperty.call(envAsObject, key)) {
-  //     const value = envAsObject[key];
-  //     console.log(`${key}=${value}`);
-  //   }
-  // }
   envFile.write(content);
+  envFile.close();
 }
-
-// const envObject = { PORT: '5000', HOST: '127.0.0.1' };
-
-// exposeEnvAsObject().then(val => console.log(val));
-// exportEnvFromObject(envObject);
