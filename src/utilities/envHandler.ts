@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import readline from 'readline';
 
+import { FileNotFoundError } from '../errors';
+
 interface ENVObjectType {
   [key: string]: string | number;
 }
@@ -12,7 +14,7 @@ export async function exposeEnvAsObject(rootDir: string): Promise<ENVObjectType>
   const filePath = path.resolve(rootDir, '.env');
 
   if (!fs.existsSync(filePath)) {
-    console.log('ENV does not exist locally.');
+    throw new FileNotFoundError(filePath);
   }
 
   const fileStream = fs.createReadStream(filePath);
