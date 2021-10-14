@@ -1,3 +1,4 @@
+import instance from './config/axios';
 import { exposeEnvAsObject } from './utilities/envHandler';
 
 export default [
