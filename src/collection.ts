@@ -1,13 +1,11 @@
-import instance from './config/axios';
+import { login } from './services/auth.service';
 import { exposeEnvAsObject } from './utilities/envHandler';
 
 export default [
   {
-    name: 'init',
-    description: 'Initialize a Secret Store project (creates and pushes project)',
-    action: () => {
-      console.log('Init');
-    }
+    name: 'login',
+    description: 'Login to you Secret Store account',
+    action: login
   },
   {
     name: 'list',
