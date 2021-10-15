@@ -10,10 +10,14 @@ instance.defaults.headers.common['UserAgentToken'] = process.env.USER_AGENT_TOKE
 
 const rc = path.resolve(os.homedir(), '.tssrc');
 
+if (!fs.existsSync(rc)) {
+  fs.writeFileSync(rc, '{}');
+}
+
 try {
   const tssrc = fs.readFileSync(rc, 'utf8');
   const config = JSON.parse(tssrc);
-  const AUTH_TOKEN = config.authToken;
+  const AUTH_TOKEN = config.authToken || '';
   console.log(AUTH_TOKEN);
 
   instance.defaults.headers.common['Authorization'] = `Bearer ${AUTH_TOKEN}`;
