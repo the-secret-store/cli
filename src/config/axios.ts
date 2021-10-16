@@ -6,7 +6,8 @@ import { ConfigurationError } from '../errors';
 
 const instance = axios.create({ baseURL: process.env.BASE_URL });
 
-instance.defaults.headers.common['UserAgentToken'] = process.env.USER_AGENT_TOKEN || 'CLI';
+instance.defaults.headers.common['UserAgentToken'] =
+  process.env.USER_AGENT_TOKEN || 'CLI';
 
 const rc = path.resolve(os.homedir(), '.tssrc');
 

@@ -10,9 +10,14 @@ export interface ValidResponse {
   data: { token: string; message: string; token_type: string };
 }
 
-export async function sendLoginRequest(credentials: Credentials): Promise<string> {
+export async function sendLoginRequest(
+  credentials: Credentials
+): Promise<string> {
   try {
-    const response: ValidResponse = await instance.post('auth/login', credentials);
+    const response: ValidResponse = await instance.post(
+      'auth/login',
+      credentials
+    );
     console.log(response.data.message);
     return response.data.token;
   } catch (err) {
