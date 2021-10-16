@@ -1,26 +1,14 @@
 import axios from 'axios';
-import fs from 'fs';
-import os from 'os';
-import path from 'path';
 import { ConfigurationError } from '../errors';
+import { getAuthToken } from '../utilities/tokenHandler';
 
 const instance = axios.create({ baseURL: process.env.BASE_URL });
 
 instance.defaults.headers.common['UserAgentToken'] =
   process.env.USER_AGENT_TOKEN || 'CLI';
 
-const rc = path.resolve(os.homedir(), '.tssrc');
-
-if (!fs.existsSync(rc)) {
-  fs.writeFileSync(rc, '{}');
-}
-
 try {
-  const tssrc = fs.readFileSync(rc, 'utf8');
-  const config = JSON.parse(tssrc);
-  const AUTH_TOKEN = config.authToken || '';
-  console.log(AUTH_TOKEN);
-
+  const AUTH_TOKEN = getAuthToken() || '';
   instance.defaults.headers.common['Authorization'] = `Bearer ${AUTH_TOKEN}`;
 } catch (err) {
   throw new ConfigurationError(err);
