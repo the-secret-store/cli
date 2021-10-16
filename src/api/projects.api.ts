@@ -8,15 +8,23 @@ export interface CreateProjectDto {
   scope: 'public' | 'private';
 }
 
-export async function createNewProject({ projectName, owner, scope }: CreateProjectDto) {
+export async function createNewProject({
+  projectName,
+  owner,
+  scope
+}: CreateProjectDto): Promise<string> {
   try {
-    const res: ApiResponseSuccess = await instance.post('/project/create', {
+    const {
+      message,
+      data: { app_id }
+    } = (<ApiResponseSuccess>await instance.post('/project/create', {
       project_name: projectName,
       owner,
       scope
-    });
+    })).data;
 
-    console.log(res.data.message);
+    console.log(`${message} \napp_id: ${app_id}`);
+    return app_id;
   } catch (error) {
     throw new ApplicationError(
       (<ApiResponseError>(<AxiosError>error).response).data.message
