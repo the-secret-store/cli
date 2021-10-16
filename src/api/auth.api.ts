@@ -6,7 +6,7 @@ export interface Credentials {
   password: string;
 }
 
-export interface ValidResponse {
+export interface ValidResponse extends ApiResponseSuccess {
   data: { token: string; message: string; token_type: string };
 }
 
