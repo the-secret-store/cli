@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import instance from '../config/axios';
 import { AuthenticationError } from '../errors/Authentication.error';
 
@@ -16,6 +17,8 @@ export async function sendLoginRequest(credentials: Credentials): Promise<string
     console.log(response.data.message);
     return response.data.token;
   } catch (err) {
-    throw new AuthenticationError((<any>err).response.data.message);
+    throw new AuthenticationError(
+      (<ApiResponseError>(<AxiosError>err).response).data.message
+    );
   }
 }

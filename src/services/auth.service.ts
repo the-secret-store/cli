@@ -19,6 +19,7 @@ export async function login() {
 
   const { email, password } = await prompts(questions);
 
+  // todo: add spinner
   const authToken = await sendLoginRequest({ email, password });
   if (!authToken) throw new AuthenticationError('Authentication failure');
 
