@@ -1,6 +1,6 @@
 import prompts, { PromptObject } from 'prompts';
 import { AuthenticationError } from '../errors/Authentication.error';
-import { sendLoginRequest } from '../utilities/authHandler';
+import { sendLoginRequest } from '../api/auth.api';
 import { addConfiguration } from './config.service';
 
 export async function login() {
