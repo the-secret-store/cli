@@ -1,11 +1,13 @@
 interface ApiResponse {
-  message: string;
+  data: {
+    message: string;
+  };
 }
 
 interface ApiResponseError extends ApiResponse {
-  details?: any;
+  data: { message: string; details?: any };
 }
 
 interface ApiResponseSuccess extends ApiResponse {
-  data?: any;
+  data: { message: string; data?: any };
 }
