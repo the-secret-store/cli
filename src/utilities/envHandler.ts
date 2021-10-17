@@ -4,7 +4,7 @@ import readline from 'readline';
 
 import { FileNotFoundError } from '../errors';
 
-interface ENVObjectType {
+export interface ENVObjectType {
   [key: string]: string | number;
 }
 

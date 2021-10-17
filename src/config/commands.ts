@@ -1,5 +1,5 @@
 import { currentSessionDetails, login, logout } from '../services/auth.service';
-import { createProject } from '../services/projects.service';
+import { createProject, fetchSecrets } from '../services/projects.service';
 import { exposeEnvAsObject } from '../utilities/envHandler';
 
 export default [
@@ -31,5 +31,10 @@ export default [
       const secrets = await exposeEnvAsObject(process.cwd());
       console.log(secrets);
     }
+  },
+  {
+    name: 'fetch',
+    description: 'Fetch and update secrets from the store',
+    action: async () => await fetchSecrets(process.cwd())
   }
 ];

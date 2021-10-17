@@ -1,13 +1,15 @@
-interface ApiResponse {
+import { AxiosResponse } from 'axios';
+
+export interface ApiResponse extends AxiosResponse {
   data: {
     message: string;
   };
 }
 
-interface ApiResponseError extends ApiResponse {
+export interface ApiResponseError extends ApiResponse {
   data: { message: string; details?: any };
 }
 
-interface ApiResponseSuccess extends ApiResponse {
+export interface ApiResponseSuccess extends ApiResponse {
   data: { message: string; data?: any };
 }

@@ -3,10 +3,11 @@ import ora from 'ora';
 import os from 'os';
 import path from 'path';
 import prompts, { PromptObject } from 'prompts';
-import { createNewProject } from '../api/projects.api';
+import { createNewProject, getSecretsFromStore } from '../api/projects.api';
 import { getTeams } from '../api/user.api';
 import { ApplicationError } from '../errors';
 import { ClientError } from '../errors/Client.error';
+import { exportEnvFromObject } from '../utilities/envHandler';
 import { getTokenPayload } from '../utilities/tokenHandler';
 
 export async function createProject(dir: string) {
@@ -87,5 +88,24 @@ export async function createProject(dir: string) {
     spinner.fail('Failed to initialize project.');
     throw error;
     // throw new ApplicationError('Failed to initialize project');
+  }
+}
+
+export async function fetchSecrets(dir: string) {
+  const spinner = ora('Fetching secrets from store...').start();
+
+  try {
+    const { tssProjectId } = await import(path.resolve(dir, 'package.json'));
+
+    if (!tssProjectId) throw new ClientError('Not a Secret Store project');
+
+    const secrets = await getSecretsFromStore(tssProjectId);
+    exportEnvFromObject(secrets, dir);
+
+    spinner.succeed('Secrets are fetched and stored locally.');
+    console.log(JSON.stringify(secrets));
+  } catch (err) {
+    spinner.fail('Failed to fetch secrets.');
+    throw err;
   }
 }
