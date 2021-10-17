@@ -1,6 +1,6 @@
-import { login, logout } from './services/auth.service';
-import { createProject } from './services/projects.service';
-import { exposeEnvAsObject } from './utilities/envHandler';
+import { login, logout } from '../services/auth.service';
+import { createProject } from '../services/projects.service';
+import { exposeEnvAsObject } from '../utilities/envHandler';
 
 export default [
   {

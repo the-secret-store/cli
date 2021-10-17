@@ -2,8 +2,8 @@
 
 import { Command } from 'commander';
 import 'dotenv/config';
-import commandCollection from './commands';
-import { initCli } from './utilities/initCli';
+import commandCollection from './config/commands';
+import { initCli } from './config/initCli';
 
 const program = new Command('tss');
 program.version('0.0.1-alpha');
