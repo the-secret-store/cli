@@ -2,6 +2,7 @@ import fs from 'fs';
 import ora from 'ora';
 import prompts, { PromptObject } from 'prompts';
 import { createNewProject } from '../api/projects.api';
+import { getTeams } from '../api/user.api';
 import { getUserDetails } from '../utilities/tokenHandler';
 
 export async function createProject(dir: string) {
@@ -12,6 +13,12 @@ export async function createProject(dir: string) {
     console.log('Project is already initialized.');
   }
 
+  const userDetails = getUserDetails();
+  const teams = (await getTeams()).map(team => ({
+    title: team.team_name,
+    value: team.team_id
+  }));
+
   const questions: PromptObject<string>[] = [
     {
       type: 'text',
@@ -20,10 +27,10 @@ export async function createProject(dir: string) {
       initial: packageName
     },
     {
-      type: 'text',
+      type: 'select',
       name: 'owner',
-      message: 'Project owner (Unique OID of the team/user)',
-      initial: getUserDetails().id
+      message: 'Select ownership',
+      choices: [{ title: userDetails.display_name, value: userDetails.id }, ...teams]
     },
     {
       type: 'select',
