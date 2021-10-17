@@ -1,5 +1,7 @@
 import fs from 'fs';
 import ora from 'ora';
+import os from 'os';
+import path from 'path';
 import prompts, { PromptObject } from 'prompts';
 import { createNewProject } from '../api/projects.api';
 import { getTeams } from '../api/user.api';
@@ -7,6 +9,7 @@ import { getTokenPayload } from '../utilities/tokenHandler';
 
 export async function createProject(dir: string) {
   const packageJsonFile = `${dir}/package.json`;
+
   const packageJson = await import(packageJsonFile);
   const { name: packageName } = packageJson;
   if (packageJson.hasOwnProperty('tssProjectId')) {
@@ -57,6 +60,22 @@ export async function createProject(dir: string) {
     console.log(
       '\nProject id has been added to package.json. \nYou might wanna reformat your package.json for readability.'
     );
+
+    const gitIgnoreEditSpinner = ora('Updating gitignore...').start();
+    try {
+      const gitIgnoreFile = path.resolve(dir, '.gitignore');
+      const gitIgnore = fs.readFileSync(gitIgnoreFile);
+      fs.writeFileSync(
+        gitIgnoreFile,
+        gitIgnore + os.EOL + '.env' + os.EOL + '.env.backup'
+      );
+      gitIgnoreEditSpinner.succeed('.gitignore file has been updated.');
+      console.log('Remember to commit the changes.');
+    } catch (err) {
+      gitIgnoreEditSpinner.fail('Failed to update gitignore.');
+      console.log('Manually add .env and .env.backup to your gitignore');
+      throw err;
+    }
   } catch (error) {
     spinner.fail('Failed to initialize project.');
     throw error;
