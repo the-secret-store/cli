@@ -51,3 +51,14 @@ export async function getSecretsFromStore(
     throw new ApplicationError((<AxiosError>error).message);
   }
 }
+
+export async function postSecretsToTheStore(
+  projectIdOrAppId: string,
+  secrets: ENVObjectType
+) {
+  try {
+    await instance.put(`/project/${projectIdOrAppId}/post`, { secrets });
+  } catch (err) {
+    throw new ApplicationError((<AxiosError>err).message);
+  }
+}

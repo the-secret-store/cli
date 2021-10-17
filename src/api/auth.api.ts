@@ -1,6 +1,7 @@
 import { AxiosError } from 'axios';
 import instance from '../config/axios';
 import { AuthenticationError } from '../errors';
+import { ApiResponseError, ApiResponseSuccess } from './ApiResponse.interface';
 
 export interface Credentials {
   email: string;

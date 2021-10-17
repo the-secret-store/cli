@@ -1,5 +1,5 @@
 import { currentSessionDetails, login, logout } from '../services/auth.service';
-import { createProject, fetchSecrets } from '../services/projects.service';
+import { createProject, fetchSecrets, postSecrets } from '../services/projects.service';
 import { exposeEnvAsObject } from '../utilities/envHandler';
 
 export default [
@@ -36,5 +36,10 @@ export default [
     name: 'fetch',
     description: 'Fetch and update secrets from the store',
     action: async () => await fetchSecrets(process.cwd())
+  },
+  {
+    name: 'post',
+    description: 'Post local secrets to the cloud store',
+    action: async () => await postSecrets(process.cwd())
   }
 ];

@@ -3,11 +3,15 @@ import ora from 'ora';
 import os from 'os';
 import path from 'path';
 import prompts, { PromptObject } from 'prompts';
-import { createNewProject, getSecretsFromStore } from '../api/projects.api';
+import {
+  createNewProject,
+  getSecretsFromStore,
+  postSecretsToTheStore
+} from '../api/projects.api';
 import { getTeams } from '../api/user.api';
 import { ApplicationError } from '../errors';
 import { ClientError } from '../errors/Client.error';
-import { exportEnvFromObject } from '../utilities/envHandler';
+import { exportEnvFromObject, exposeEnvAsObject } from '../utilities/envHandler';
 import { getTokenPayload } from '../utilities/tokenHandler';
 
 export async function createProject(dir: string) {
@@ -19,6 +23,7 @@ export async function createProject(dir: string) {
   }
 
   const packageJson = await import(packageJsonFile);
+
   const { name: packageName } = packageJson;
   if (packageJson.hasOwnProperty('tssProjectId')) {
     console.log('Project is already initialized.');
@@ -106,6 +111,23 @@ export async function fetchSecrets(dir: string) {
     console.log(JSON.stringify(secrets));
   } catch (err) {
     spinner.fail('Failed to fetch secrets.');
+    throw err;
+  }
+}
+
+export async function postSecrets(dir: string) {
+  const spinner = ora('Posting secrets to the store...').start();
+
+  try {
+    const { tssProjectId } = await import(path.resolve(dir, 'package.json'));
+
+    if (!tssProjectId) throw new ClientError('Not a Secret Store project');
+
+    const secrets = await exposeEnvAsObject(dir);
+    await postSecretsToTheStore(tssProjectId, secrets);
+    spinner.succeed('Secrets have been posted to the store.');
+  } catch (err) {
+    spinner.fail('Failed to post secrets.');
     throw err;
   }
 }
