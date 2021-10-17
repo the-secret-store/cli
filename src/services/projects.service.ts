@@ -5,10 +5,17 @@ import path from 'path';
 import prompts, { PromptObject } from 'prompts';
 import { createNewProject } from '../api/projects.api';
 import { getTeams } from '../api/user.api';
+import { ApplicationError } from '../errors';
+import { ClientError } from '../errors/Client.error';
 import { getTokenPayload } from '../utilities/tokenHandler';
 
 export async function createProject(dir: string) {
-  const packageJsonFile = `${dir}/package.json`;
+  const packageJsonFile = path.resolve(dir, 'package.json');
+
+  if (!fs.existsSync(packageJsonFile)) {
+    console.error('Node project is not detected in the current directory.');
+    throw new ClientError('package.json not found');
+  }
 
   const packageJson = await import(packageJsonFile);
   const { name: packageName } = packageJson;
@@ -74,10 +81,11 @@ export async function createProject(dir: string) {
     } catch (err) {
       gitIgnoreEditSpinner.fail('Failed to update gitignore.');
       console.log('Manually add .env and .env.backup to your gitignore');
-      throw err;
+      throw new ClientError('Unable to find or modify .gitignore', err as Error);
     }
   } catch (error) {
     spinner.fail('Failed to initialize project.');
     throw error;
+    // throw new ApplicationError('Failed to initialize project');
   }
 }
