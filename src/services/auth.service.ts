@@ -1,5 +1,5 @@
 import prompts, { PromptObject } from 'prompts';
-import { AuthenticationError } from '../errors/Authentication.error';
+import { AuthenticationError } from '../errors';
 import { sendLoginRequest } from '../api/auth.api';
 import { addConfiguration } from './config.service';
 

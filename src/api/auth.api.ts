@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
 import instance from '../config/axios';
-import { AuthenticationError } from '../errors/Authentication.error';
+import { AuthenticationError } from '../errors';
 
 export interface Credentials {
   email: string;

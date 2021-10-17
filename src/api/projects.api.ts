@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
 import instance from '../config/axios';
-import { ApplicationError } from '../errors/ApplicationError';
+import { ApplicationError } from '../errors';
 
 export interface CreateProjectDto {
   projectName: string;
