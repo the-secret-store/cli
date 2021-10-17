@@ -3,7 +3,7 @@ import ora from 'ora';
 import prompts, { PromptObject } from 'prompts';
 import { createNewProject } from '../api/projects.api';
 import { getTeams } from '../api/user.api';
-import { getUserDetails } from '../utilities/tokenHandler';
+import { getTokenPayload } from '../utilities/tokenHandler';
 
 export async function createProject(dir: string) {
   const packageJsonFile = `${dir}/package.json`;
@@ -13,7 +13,7 @@ export async function createProject(dir: string) {
     console.log('Project is already initialized.');
   }
 
-  const userDetails = getUserDetails();
+  const userDetails = getTokenPayload();
   const teams = (await getTeams()).map(team => ({
     title: team.team_name,
     value: team.team_id

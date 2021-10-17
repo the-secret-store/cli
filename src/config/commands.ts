@@ -1,13 +1,12 @@
-import { login, logout } from '../services/auth.service';
+import { currentSessionDetails, login, logout } from '../services/auth.service';
 import { createProject } from '../services/projects.service';
 import { exposeEnvAsObject } from '../utilities/envHandler';
 
 export default [
   {
-    name: 'init',
-    description:
-      'Create a new project from current directory (requires pre-existing package.json)',
-    action: async () => await createProject(process.cwd())
+    name: 'auth',
+    description: 'Get details of current user',
+    action: currentSessionDetails
   },
   {
     name: 'login',
@@ -18,6 +17,12 @@ export default [
     name: 'logout',
     description: 'Logout of your Secret Store account',
     action: logout
+  },
+  {
+    name: 'init',
+    description:
+      'Create a new project from current directory (requires pre-existing package.json)',
+    action: async () => await createProject(process.cwd())
   },
   {
     name: 'list',

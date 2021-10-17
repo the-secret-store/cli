@@ -7,6 +7,20 @@ import {
   removeConfiguration
 } from './config.service';
 import ora from 'ora';
+import { getTokenPayload } from '../utilities/tokenHandler';
+
+export function currentSessionDetails() {
+  try {
+    const { display_name, unverified } = getTokenPayload();
+    console.log(`Logged in as ${display_name}.`);
+    if (unverified)
+      console.log(
+        '\n! Your account is not verified. Verify your account and signin again.'
+      );
+  } catch (err) {
+    console.log('Not logged in.\nUse the command `tss login` to login.');
+  }
+}
 
 export async function login() {
   if (getConfiguration('authToken')) {
