@@ -23,11 +23,14 @@ export async function createNewProject({
       scope
     })).data;
 
-    console.log(`${message} \napp_id: ${app_id}`);
+    console.log(message);
     return app_id;
   } catch (error) {
-    throw new ApplicationError(
-      (<ApiResponseError>(<AxiosError>error).response).data.message
-    );
+    if ((<AxiosError>error).response?.status) {
+      throw new ApplicationError(
+        (<ApiResponseError>(<AxiosError>error).response).data.message
+      );
+    }
+    throw error;
   }
 }

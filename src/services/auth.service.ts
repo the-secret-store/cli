@@ -2,6 +2,7 @@ import prompts, { PromptObject } from 'prompts';
 import { AuthenticationError } from '../errors';
 import { sendLoginRequest } from '../api/auth.api';
 import { addConfiguration } from './config.service';
+import ora from 'ora';
 
 export async function login() {
   const questions: PromptObject<string>[] = [
@@ -19,9 +20,18 @@ export async function login() {
 
   const { email, password } = await prompts(questions);
 
-  // todo: add spinner
-  const authToken = await sendLoginRequest({ email, password });
-  if (!authToken) throw new AuthenticationError('Authentication failure');
+  const spinner = ora({
+    text: 'Logging you in...'
+  }).start();
 
-  addConfiguration({ authToken });
+  try {
+    const authToken = await sendLoginRequest({ email, password });
+    if (!authToken) throw new AuthenticationError('Authentication failure');
+
+    addConfiguration({ authToken });
+    spinner.succeed('Log in successful.');
+  } catch (err) {
+    spinner.fail('Login failed');
+    throw err;
+  }
 }
