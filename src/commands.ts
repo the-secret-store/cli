@@ -1,4 +1,4 @@
-import { login } from './services/auth.service';
+import { login, logout } from './services/auth.service';
 import { createProject } from './services/projects.service';
 import { exposeEnvAsObject } from './utilities/envHandler';
 
@@ -11,8 +11,13 @@ export default [
   },
   {
     name: 'login',
-    description: 'Login to you Secret Store account',
+    description: 'Login to your Secret Store account',
     action: login
+  },
+  {
+    name: 'logout',
+    description: 'Logout of your Secret Store account',
+    action: logout
   },
   {
     name: 'list',

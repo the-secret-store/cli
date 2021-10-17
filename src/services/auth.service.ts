@@ -1,10 +1,18 @@
 import prompts, { PromptObject } from 'prompts';
 import { AuthenticationError } from '../errors';
 import { sendLoginRequest } from '../api/auth.api';
-import { addConfiguration } from './config.service';
+import {
+  addConfiguration,
+  getConfiguration,
+  removeConfiguration
+} from './config.service';
 import ora from 'ora';
 
 export async function login() {
+  if (getConfiguration('authToken')) {
+    console.log('You are already logged in.');
+    return;
+  }
   const questions: PromptObject<string>[] = [
     {
       type: 'text',
@@ -34,4 +42,9 @@ export async function login() {
     spinner.fail('Login failed');
     throw err;
   }
+}
+
+export function logout() {
+  removeConfiguration('authToken');
+  console.log('Logged out.');
 }
