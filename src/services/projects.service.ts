@@ -9,7 +9,6 @@ import {
   postSecretsToTheStore
 } from '../api/projects.api';
 import { getTeams } from '../api/user.api';
-import { ApplicationError } from '../errors';
 import { ClientError } from '../errors/Client.error';
 import { exportEnvFromObject, exposeEnvAsObject } from '../utilities/envHandler';
 import prettyJson from '../utilities/prettyJson';
@@ -26,7 +25,7 @@ export async function createProject(dir: string) {
   const packageJson = await import(packageJsonFile);
 
   const { name: packageName } = packageJson;
-  if (packageJson.hasOwnProperty('tssProjectId')) {
+  if (Object.prototype.hasOwnProperty.call(packageJson, 'tssProjectId')) {
     console.log('Project is already initialized.');
   }
 

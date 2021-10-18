@@ -1,0 +1,16 @@
+{
+  "env": {
+    "browser": false,
+    "node": true,
+    "es2021": true
+  },
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "rules": {
+    "no-unused-vars": "warn",
+    "no-unused-labels": "warn",
+    "@typescript-eslint/no-explicit-any": "off"
+  }
+}

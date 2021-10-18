@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import instance from '../config/axios';
 import { ApplicationError } from '../errors';
 import { ApiResponseError, ApiResponseSuccess } from './ApiResponse.interface';

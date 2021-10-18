@@ -9,7 +9,7 @@ export interface ENVObjectType {
 }
 
 export async function exposeEnvAsObject(rootDir: string): Promise<ENVObjectType> {
-  let data: ENVObjectType = {};
+  const data: ENVObjectType = {};
 
   const filePath = path.resolve(rootDir, '.env');
 
