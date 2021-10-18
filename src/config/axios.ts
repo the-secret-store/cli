@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { ConfigurationError } from '../errors';
 import { getAuthToken } from '../utilities/tokenHandler';
 
 const instance = axios.create({ baseURL: process.env.BASE_URL });
@@ -11,7 +10,7 @@ try {
   const AUTH_TOKEN = getAuthToken() || '';
   instance.defaults.headers.common['Authorization'] = `Bearer ${AUTH_TOKEN}`;
 } catch (err) {
-  throw new ConfigurationError(err);
+  // ? we don't wanna throw, coz we wanna let users login without rc file/ authToken
 }
 
 export default instance;
