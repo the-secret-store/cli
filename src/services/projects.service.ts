@@ -12,6 +12,7 @@ import { getTeams } from '../api/user.api';
 import { ApplicationError } from '../errors';
 import { ClientError } from '../errors/Client.error';
 import { exportEnvFromObject, exposeEnvAsObject } from '../utilities/envHandler';
+import prettyJson from '../utilities/prettyJson';
 import { getTokenPayload } from '../utilities/tokenHandler';
 
 export async function createProject(dir: string) {
@@ -67,7 +68,7 @@ export async function createProject(dir: string) {
     const app_id = await createNewProject({ projectName, owner, scope });
 
     packageJson.default.tssProjectId = app_id;
-    fs.writeFileSync(packageJsonFile, JSON.stringify(packageJson.default));
+    fs.writeFileSync(packageJsonFile, prettyJson(packageJson.default));
 
     spinner.succeed(`Project initialized successfully. app_id: ${app_id}`);
     console.log(
@@ -108,7 +109,7 @@ export async function fetchSecrets(dir: string) {
     exportEnvFromObject(secrets, dir);
 
     spinner.succeed('Secrets are fetched and stored locally.');
-    console.log(JSON.stringify(secrets));
+    console.log(prettyJson(secrets));
   } catch (err) {
     spinner.fail('Failed to fetch secrets.');
     throw err;

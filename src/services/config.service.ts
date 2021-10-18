@@ -2,6 +2,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import { ConfigurationError } from '../errors';
+import prettyJson from '../utilities/prettyJson';
 
 export interface Configurations {
   authToken?: string;
@@ -18,7 +19,7 @@ export function addConfiguration(configuration: { [key: string]: any }) {
   try {
     const tssrc = fs.readFileSync(CONFIGURATION_FILE, 'utf8');
     const config = { ...JSON.parse(tssrc), ...configuration };
-    fs.writeFileSync(CONFIGURATION_FILE, JSON.stringify(config, null, 2));
+    fs.writeFileSync(CONFIGURATION_FILE, prettyJson(config));
   } catch (exp) {
     throw new ConfigurationError(exp);
   }
@@ -48,7 +49,7 @@ export function removeConfiguration(key: string) {
     const tssrc = fs.readFileSync(CONFIGURATION_FILE, 'utf8');
     const config = JSON.parse(tssrc);
     delete config[key];
-    fs.writeFileSync(CONFIGURATION_FILE, JSON.stringify(config, null, 2));
+    fs.writeFileSync(CONFIGURATION_FILE, prettyJson(config));
   } catch (exp) {
     throw new ConfigurationError(exp);
   }
