@@ -1,4 +1,8 @@
+import { exec } from 'child_process';
+import { homedir } from 'os';
+import path from 'path';
 import { currentSessionDetails, login, logout } from '../services/auth.service';
+import { getConfigurations } from '../services/config.service';
 import { createProject, fetchSecrets, postSecrets } from '../services/projects.service';
 import { exposeEnvAsObject } from '../utilities/envHandler';
 
@@ -41,5 +45,21 @@ export default [
     name: 'post',
     description: 'Post local secrets to the cloud store',
     action: async () => await postSecrets(process.cwd())
+  },
+  {
+    name: 'configure',
+    description: 'Edit the .tssrc file in your preferred editor',
+    action: () => {
+      exec(`${getConfigurations().preferredEditor} ${path.resolve(homedir(), '.tssrc')}`);
+    }
+  },
+  {
+    name: 'edit',
+    description: 'Edit .env file in your preferred editor',
+    action: () => {
+      exec(
+        `${getConfigurations().preferredEditor} ${path.resolve(process.cwd(), '.env')}`
+      );
+    }
   }
 ];
