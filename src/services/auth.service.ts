@@ -1,3 +1,4 @@
+import pc from 'picocolors';
 import prompts, { PromptObject } from 'prompts';
 import { AuthenticationError } from '../errors';
 import { sendLoginRequest } from '../api/auth.api';
@@ -15,7 +16,7 @@ export function currentSessionDetails() {
     console.log(`Logged in as ${display_name}.`);
     if (unverified)
       console.log(
-        '\n! Your account is not verified. Verify your account and signin again.'
+        pc.red('\n! Your account is not verified. Verify your account and signin again.')
       );
   } catch (err) {
     console.log('Not logged in.\nUse the command `tss login` to login.');

@@ -2,6 +2,7 @@ import fs from 'fs';
 import ora from 'ora';
 import os from 'os';
 import path from 'path';
+import pc from 'picocolors';
 import prompts, { PromptObject } from 'prompts';
 import {
   createNewProject,
@@ -18,7 +19,7 @@ export async function createProject(dir: string) {
   const packageJsonFile = path.resolve(dir, 'package.json');
 
   if (!fs.existsSync(packageJsonFile)) {
-    console.error('Node project is not detected in the current directory.');
+    console.error(pc.yellow('Node project is not detected in the current directory.'));
     throw new ClientError(
       'package.json not found',
       new FileNotFoundError(packageJsonFile)
@@ -72,9 +73,11 @@ export async function createProject(dir: string) {
     packageJson.default.tssProjectId = app_id;
     fs.writeFileSync(packageJsonFile, prettyJson(packageJson.default));
 
-    spinner.succeed(`Project initialized successfully. app_id: ${app_id}`);
+    spinner.succeed(
+      `Project initialized successfully. app_id: ${pc.underline(pc.cyan(app_id))}`
+    );
     console.log(
-      '\nProject id has been added to package.json. \nYou might wanna reformat your package.json for readability.'
+      '\nProject id has been added to package.json. \nYou might wanna reformat your package.json for readability.\n'
     );
 
     const gitIgnoreEditSpinner = ora('Updating gitignore...').start();
@@ -88,6 +91,7 @@ export async function createProject(dir: string) {
       gitIgnoreEditSpinner.succeed('.gitignore file has been updated.');
       console.log('Remember to commit the changes.');
     } catch (err) {
+      // todo: create .gitignore file if it doesn't exist
       gitIgnoreEditSpinner.fail('Failed to update gitignore.');
       console.log('Manually add .env and .env.backup to your gitignore');
       throw new ClientError('Unable to find or modify .gitignore', err as Error);

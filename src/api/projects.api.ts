@@ -1,4 +1,5 @@
 import { AxiosError } from 'axios';
+import pc from 'picocolors';
 import instance from '../config/axios';
 import { ApplicationError } from '../errors';
 import { ENVObjectType } from '../utilities/envHandler';
@@ -25,7 +26,7 @@ export async function createNewProject({
       scope
     })).data;
 
-    console.log(message);
+    console.log(pc.green(message));
     return app_id;
   } catch (error) {
     if ((<AxiosError>error).response?.status) {
