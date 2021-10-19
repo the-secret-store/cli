@@ -19,7 +19,8 @@ export async function sendLoginRequest(credentials: Credentials): Promise<string
     return response.data.token;
   } catch (err) {
     throw new AuthenticationError(
-      (<ApiResponseError>(<AxiosError>err).response).data.message
+      (<ApiResponseError>(<AxiosError>err).response).data.message,
+      err as Error
     );
   }
 }

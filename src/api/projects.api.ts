@@ -30,7 +30,8 @@ export async function createNewProject({
   } catch (error) {
     if ((<AxiosError>error).response?.status) {
       throw new ApplicationError(
-        (<ApiResponseError>(<AxiosError>error).response).data.message
+        (<ApiResponseError>(<AxiosError>error).response).data.message,
+        error as Error
       );
     }
     throw error;
@@ -48,7 +49,7 @@ export async function getSecretsFromStore(
     const { secrets } = response.data.data;
     return secrets;
   } catch (error) {
-    throw new ApplicationError((<AxiosError>error).message);
+    throw new ApplicationError((<AxiosError>error).message, error as Error);
   }
 }
 
@@ -59,6 +60,6 @@ export async function postSecretsToTheStore(
   try {
     await instance.put(`/project/${projectIdOrAppId}/post`, { secrets });
   } catch (err) {
-    throw new ApplicationError((<AxiosError>err).message);
+    throw new ApplicationError((<AxiosError>err).message, err as Error);
   }
 }

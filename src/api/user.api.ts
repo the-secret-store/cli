@@ -16,8 +16,8 @@ export async function getTeams(): Promise<Array<TeamDetail>> {
     return teams;
   } catch (error) {
     throw new ApplicationError(
-      (<ApiResponseError>(<AxiosError>error).response)?.data?.message
+      (<ApiResponseError>(<AxiosError>error).response)?.data?.message,
+      error as Error
     );
-    // throw (<AxiosError>error).message;
   }
 }

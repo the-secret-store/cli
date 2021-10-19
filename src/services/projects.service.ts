@@ -9,7 +9,7 @@ import {
   postSecretsToTheStore
 } from '../api/projects.api';
 import { getTeams } from '../api/user.api';
-import { ClientError } from '../errors/Client.error';
+import { ClientError, FileNotFoundError } from '../errors';
 import { exportEnvFromObject, exposeEnvAsObject } from '../utilities/envHandler';
 import prettyJson from '../utilities/prettyJson';
 import { getTokenPayload } from '../utilities/tokenHandler';
@@ -19,7 +19,10 @@ export async function createProject(dir: string) {
 
   if (!fs.existsSync(packageJsonFile)) {
     console.error('Node project is not detected in the current directory.');
-    throw new ClientError('package.json not found');
+    throw new ClientError(
+      'package.json not found',
+      new FileNotFoundError(packageJsonFile)
+    );
   }
 
   const packageJson = await import(packageJsonFile);

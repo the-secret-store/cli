@@ -21,7 +21,7 @@ export function getAuthToken() {
 
     return config.authToken;
   } catch (error) {
-    throw new ConfigurationError(error);
+    throw new ConfigurationError(error as Error);
   }
 }
 
@@ -32,6 +32,6 @@ export function getTokenPayload() {
 
     return details;
   } catch (error) {
-    throw new ConfigurationError(error);
+    throw new ConfigurationError(error as Error);
   }
 }
