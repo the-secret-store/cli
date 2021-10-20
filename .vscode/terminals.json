@@ -5,29 +5,8 @@
       "name": "zsh",
       "description": "Terminal for use",
       "focus": true,
-      "commands": ["clear"],
+      "commands": ["npm link", "clear"],
       "recycle": true
-    },
-    {
-      "name": "mongosh",
-      "description": "Start mongodb daemon service and a shell",
-      "focus": false,
-      "icon": "database",
-      "commands": [
-        "sudo service mongod start",
-        "root",
-        "service mongod status",
-        "mongosh",
-        "use tss-dev"
-      ]
-    },
-    {
-      "name": "api",
-      "description": "Runs the secret-store-api",
-      "focus": false,
-      "icon": "code",
-      "onlyMultiple": "true",
-      "command": "cd ../api && npm run dev"
     },
     {
       "name": "tsc",
