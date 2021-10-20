@@ -10,14 +10,20 @@ export interface Credentials {
 }
 
 export interface ValidResponse extends ApiResponseSuccess {
-  data: { token: string; message: string; token_type: string };
+  data: {
+    tokens: { authToken: string; refreshToken: string };
+    message: string;
+    token_type: string;
+  };
 }
 
-export async function sendLoginRequest(credentials: Credentials): Promise<string> {
+export async function sendLoginRequest(
+  credentials: Credentials
+): Promise<{ authToken: string; refreshToken: string }> {
   try {
     const response: ValidResponse = await instance.post('auth/login', credentials);
     console.log(pc.green(response.data.message));
-    return response.data.token;
+    return response.data.tokens;
   } catch (err) {
     throw new AuthenticationError(
       (<ApiResponseError>(<AxiosError>err).response).data.message,

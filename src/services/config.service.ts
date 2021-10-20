@@ -44,12 +44,14 @@ export function getConfiguration(key: string) {
   }
 }
 
-export function removeConfiguration(key: string) {
+export function removeConfigurations(...keys: string[]) {
   try {
     const tssrc = fs.readFileSync(CONFIGURATION_FILE, 'utf8');
     const config = JSON.parse(tssrc);
-    delete config[key];
-    fs.writeFileSync(CONFIGURATION_FILE, prettyJson(config));
+    const updatedEntries = Object.entries(config).filter(([key]) => !keys.includes(key));
+
+    const newConfig = Object.fromEntries(updatedEntries);
+    fs.writeFileSync(CONFIGURATION_FILE, prettyJson(newConfig));
   } catch (exp) {
     throw new ConfigurationError(exp as Error);
   }

@@ -5,7 +5,7 @@ import { sendLoginRequest } from '../api/auth.api';
 import {
   addConfiguration,
   getConfiguration,
-  removeConfiguration
+  removeConfigurations
 } from './config.service';
 import ora from 'ora';
 import { getTokenPayload } from '../utilities/tokenHandler';
@@ -48,10 +48,10 @@ export async function login() {
   }).start();
 
   try {
-    const authToken = await sendLoginRequest({ email, password });
+    const { authToken, refreshToken } = await sendLoginRequest({ email, password });
     if (!authToken) throw new AuthenticationError('Authentication failure');
 
-    addConfiguration({ authToken });
+    addConfiguration({ authToken, refreshToken });
     spinner.succeed('Log in successful.');
   } catch (err) {
     spinner.fail('Login failed');
@@ -60,6 +60,6 @@ export async function login() {
 }
 
 export function logout() {
-  removeConfiguration('authToken');
+  removeConfigurations('authToken', 'refreshToken');
   console.log('Logged out.');
 }
