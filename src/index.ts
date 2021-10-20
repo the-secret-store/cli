@@ -2,6 +2,7 @@
 
 import { Command } from 'commander';
 import 'dotenv/config';
+import pc from 'picocolors';
 import commandCollection from './config/commands';
 import { createRc } from './config/createRc';
 
@@ -15,7 +16,13 @@ async function initCli() {
     program.command(command.name).description(command.description).action(command.action);
   });
 
-  await program.parseAsync(process.argv);
+  try {
+    await program.parseAsync(process.argv);
+  } catch (error) {
+    const err = <Error>error;
+    console.error(pc.red(`${err.name}: ${err.message}`));
+    err.stack && console.warn(pc.yellow(err.stack));
+  }
 }
 
 initCli();
