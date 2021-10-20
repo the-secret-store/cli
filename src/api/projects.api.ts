@@ -2,6 +2,7 @@ import { AxiosError } from 'axios';
 import pc from 'picocolors';
 import instance from '../config/axios';
 import { ApplicationError } from '../errors';
+import { TokenExpired } from '../errors/TokenExpired.error';
 import { ENVObjectType } from '../utilities/envHandler';
 import { ApiResponseError, ApiResponseSuccess } from './ApiResponse.interface';
 
@@ -29,13 +30,11 @@ export async function createNewProject({
     console.log(pc.green(message));
     return app_id;
   } catch (error) {
-    if ((<AxiosError>error).response?.status) {
-      throw new ApplicationError(
-        (<ApiResponseError>(<AxiosError>error).response).data.message,
-        error as Error
-      );
+    const response = <ApiResponseError>(error as AxiosError).response;
+    if (response.status === 403 && response.data.message.includes('Token expired')) {
+      throw new TokenExpired();
     }
-    throw error;
+    throw new ApplicationError(response.data.message, error as Error);
   }
 }
 
@@ -50,7 +49,11 @@ export async function getSecretsFromStore(
     const { secrets } = response.data.data;
     return secrets;
   } catch (error) {
-    throw new ApplicationError((<AxiosError>error).message, error as Error);
+    const response = <ApiResponseError>(error as AxiosError).response;
+    if (response.status === 403 && response.data.message.includes('Token expired')) {
+      throw new TokenExpired();
+    }
+    throw new ApplicationError(response.data.message, error as Error);
   }
 }
 
@@ -60,7 +63,11 @@ export async function postSecretsToTheStore(
 ) {
   try {
     await instance.put(`/project/${projectIdOrAppId}/post`, { secrets });
-  } catch (err) {
-    throw new ApplicationError((<AxiosError>err).message, err as Error);
+  } catch (error) {
+    const response = <ApiResponseError>(error as AxiosError).response;
+    if (response.status === 403 && response.data.message.includes('Token expired')) {
+      throw new TokenExpired();
+    }
+    throw new ApplicationError(response.data.message, error as Error);
   }
 }

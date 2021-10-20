@@ -1,9 +1,9 @@
 import pc from 'picocolors';
 import prompts, { PromptObject } from 'prompts';
-import { AuthenticationError } from '../errors';
-import { sendLoginRequest } from '../api/auth.api';
+import { ApplicationError, AuthenticationError } from '../errors';
+import { requestNewTokenPair, sendLoginRequest } from '../api/auth.api';
 import {
-  addConfiguration,
+  addConfigurations,
   getConfiguration,
   removeConfigurations
 } from './config.service';
@@ -51,7 +51,7 @@ export async function login() {
     const { authToken, refreshToken } = await sendLoginRequest({ email, password });
     if (!authToken) throw new AuthenticationError('Authentication failure');
 
-    addConfiguration({ authToken, refreshToken });
+    addConfigurations({ authToken, refreshToken });
     spinner.succeed('Log in successful.');
   } catch (err) {
     spinner.fail('Login failed');
@@ -62,4 +62,17 @@ export async function login() {
 export function logout() {
   removeConfigurations('authToken', 'refreshToken');
   console.log('Logged out.');
+}
+
+export async function refreshTokens() {
+  const spinner = ora('Refreshing tokens...').start();
+  try {
+    const { authToken, refreshToken } = await requestNewTokenPair();
+    addConfigurations({ authToken, refreshToken });
+    spinner.succeed('Tokens refreshed.');
+    spinner.clear();
+  } catch (error) {
+    spinner.fail('Failed to refresh tokens.');
+    throw new ApplicationError('Could not refresh tokens.', error as Error);
+  }
 }
