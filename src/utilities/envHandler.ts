@@ -1,17 +1,19 @@
+import { FileNotFoundError } from '../errors';
 import fs from 'fs';
 import path from 'path';
 import readline from 'readline';
-
-import { FileNotFoundError } from '../errors';
 
 export interface ENVObjectType {
   [key: string]: string | number;
 }
 
-export async function exposeEnvAsObject(rootDir: string): Promise<ENVObjectType> {
+export async function exposeEnvAsObject(
+  rootDir: string,
+  fileName = '.env'
+): Promise<ENVObjectType> {
   const data: ENVObjectType = {};
 
-  const filePath = path.resolve(rootDir, '.env');
+  const filePath = path.resolve(rootDir, fileName);
 
   if (!fs.existsSync(filePath)) {
     throw new FileNotFoundError(filePath);
@@ -35,8 +37,12 @@ export async function exposeEnvAsObject(rootDir: string): Promise<ENVObjectType>
   return data;
 }
 
-export function exportEnvFromObject(envAsObject: ENVObjectType, rootDir: string) {
-  const envFilePath = path.resolve(rootDir, '.env');
+export function exportEnvFromObject(
+  envAsObject: ENVObjectType,
+  rootDir: string,
+  fileName = '.env'
+) {
+  const envFilePath = path.resolve(rootDir, fileName);
   const envFile = fs.createWriteStream(envFilePath);
   const content = Object.entries(envAsObject)
     .map(([key, value]) => `${key} = ${value}`)

@@ -1,9 +1,3 @@
-import fs from 'fs';
-import ora from 'ora';
-import os from 'os';
-import path from 'path';
-import pc from 'picocolors';
-import prompts, { PromptObject } from 'prompts';
 import {
   createNewProject,
   getSecretsFromStore,
@@ -14,6 +8,13 @@ import { ClientError, FileNotFoundError } from '../errors';
 import { exportEnvFromObject, exposeEnvAsObject } from '../utilities/envHandler';
 import prettyJson from '../utilities/prettyJson';
 import { getTokenPayload } from '../utilities/tokenHandler';
+import { getConfigurations } from './config.service';
+import fs from 'fs';
+import ora from 'ora';
+import os from 'os';
+import path from 'path';
+import pc from 'picocolors';
+import prompts, { PromptObject } from 'prompts';
 
 export async function createProject(dir: string) {
   const packageJsonFile = path.resolve(dir, 'package.json');
@@ -112,7 +113,22 @@ export async function fetchSecrets(dir: string) {
     if (!tssProjectId) throw new ClientError('Not a Secret Store project');
 
     const secrets = await getSecretsFromStore(tssProjectId);
-    exportEnvFromObject(secrets, dir);
+
+    if (getConfigurations().noOfLocalBackups == 0) {
+      exportEnvFromObject(secrets, dir);
+    }
+
+    const currentFile = path.resolve(dir, '.env');
+    if (fs.existsSync(currentFile)) {
+      const currentLocalSecrets = await exposeEnvAsObject(dir, '.env');
+      if (JSON.stringify(currentLocalSecrets) === JSON.stringify(secrets)) {
+        spinner.succeed('Already up to date.');
+        return;
+      }
+
+      exportEnvFromObject(currentLocalSecrets, dir, '.env.backup');
+      exportEnvFromObject(secrets, dir);
+    }
 
     spinner.succeed('Secrets are fetched and stored locally.');
     console.log(prettyJson(secrets));
