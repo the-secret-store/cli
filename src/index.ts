@@ -12,6 +12,11 @@ async function initCli() {
   const program = new Command('tss');
   program.version('0.0.1-alpha');
 
+  process.on('SIGINT', () => {
+    console.info(pc.yellow('Interrupt'));
+    process.exit(0);
+  });
+
   createRc();
 
   commandCollection.forEach(command => {
