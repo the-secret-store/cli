@@ -1,9 +1,9 @@
-import axios, { AxiosError } from 'axios';
-import pc from 'picocolors';
 import instance from '../config/axios';
 import { AuthenticationError } from '../errors';
 import { getConfiguration } from '../services/config.service';
 import { ApiResponseError, ApiResponseSuccess } from './ApiResponse.interface';
+import axios, { AxiosError } from 'axios';
+import pc from 'picocolors';
 
 export interface Credentials {
   email: string;
@@ -46,9 +46,8 @@ export async function requestNewTokenPair(): Promise<TokenPair> {
     });
 
     const response: ValidResponse = await ins.put('auth/refresh');
-    console.log(response);
     console.log(pc.green(response.data.message));
-    return response?.data?.tokens;
+    return response.data.tokens;
   } catch (err) {
     throw new AuthenticationError(
       (<ApiResponseError>(<AxiosError>err).response).data.message,

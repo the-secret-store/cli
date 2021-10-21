@@ -17,9 +17,9 @@ export async function getTeams(): Promise<Array<TeamDetail>> {
     return teams;
   } catch (error) {
     const response = <ApiResponseError>(error as AxiosError).response;
-    if (response.status === 403 && response.data.message.includes('Token expired')) {
+    if (response?.status === 403 && response?.data.message.includes('Token expired')) {
       throw new TokenExpired();
     }
-    throw new ApplicationError(response.data.message, error as Error);
+    throw new ApplicationError(response?.data.message, error as Error);
   }
 }

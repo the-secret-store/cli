@@ -1,14 +1,14 @@
-import pc from 'picocolors';
-import prompts, { PromptObject } from 'prompts';
-import { ApplicationError, AuthenticationError } from '../errors';
 import { requestNewTokenPair, sendLoginRequest } from '../api/auth.api';
+import { ApplicationError, AuthenticationError } from '../errors';
+import { getTokenPayload } from '../utilities/tokenHandler';
 import {
   addConfigurations,
   getConfiguration,
   removeConfigurations
 } from './config.service';
 import ora from 'ora';
-import { getTokenPayload } from '../utilities/tokenHandler';
+import pc from 'picocolors';
+import prompts, { PromptObject } from 'prompts';
 
 export function currentSessionDetails() {
   try {
@@ -70,7 +70,6 @@ export async function refreshTokens() {
     const { authToken, refreshToken } = await requestNewTokenPair();
     addConfigurations({ authToken, refreshToken });
     spinner.succeed('Tokens refreshed.');
-    spinner.clear();
   } catch (error) {
     spinner.fail('Failed to refresh tokens.');
     throw new ApplicationError('Could not refresh tokens.', error as Error);
