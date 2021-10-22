@@ -1,6 +1,6 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { ConfigurationError } from '../errors';
-import { getConfiguration } from '../services/config.service';
+import { ConfigService } from '../services/config.service';
 
 export interface TokenPayload extends JwtPayload {
   id: string;
@@ -10,7 +10,7 @@ export interface TokenPayload extends JwtPayload {
 
 export function getTokenPayload() {
   try {
-    const token = getConfiguration('authToken');
+    const token = ConfigService.getConfiguration('authToken');
     const details: TokenPayload = <TokenPayload>jwt.decode(token);
 
     return details;

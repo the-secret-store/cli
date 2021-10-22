@@ -1,32 +1,32 @@
 import { exec } from 'child_process';
 import { homedir } from 'os';
 import path from 'path';
-import { currentSessionDetails, login, logout } from '../services/auth.service';
-import { getConfigurations } from '../services/config.service';
-import { createProject, fetchSecrets, postSecrets } from '../services/projects.service';
+import { AuthService } from '../services/auth.service';
+import { ConfigService } from '../services/config.service';
+import { ProjectService } from '../services/projects.service';
 import { exposeEnvAsObject } from '../utilities/envHandler';
 
 export default [
   {
     name: 'auth',
     description: 'Get details of current user',
-    action: currentSessionDetails
+    action: AuthService.currentSessionDetails
   },
   {
     name: 'login',
     description: 'Login to your Secret Store account',
-    action: login
+    action: AuthService.login
   },
   {
     name: 'logout',
     description: 'Logout of your Secret Store account',
-    action: logout
+    action: AuthService.logout
   },
   {
     name: 'init',
     description:
       'Create a new project from current directory (requires pre-existing package.json)',
-    action: async () => await createProject(process.cwd())
+    action: async () => await ProjectService.createProject(process.cwd())
   },
   {
     name: 'list',
@@ -39,18 +39,23 @@ export default [
   {
     name: 'fetch',
     description: 'Fetch and update secrets from the store',
-    action: async () => await fetchSecrets(process.cwd())
+    action: async () => await ProjectService.fetchSecrets(process.cwd())
   },
   {
     name: 'post',
     description: 'Post local secrets to the cloud store',
-    action: async () => await postSecrets(process.cwd())
+    action: async () => await ProjectService.postSecrets(process.cwd())
   },
   {
     name: 'configure',
     description: 'Edit the .tssrc file in your preferred editor',
     action: () => {
-      exec(`${getConfigurations().preferredEditor} ${path.resolve(homedir(), '.tssrc')}`);
+      exec(
+        `${ConfigService.getConfigurations().preferredEditor} ${path.resolve(
+          homedir(),
+          '.tssrc'
+        )}`
+      );
     }
   },
   {
@@ -58,7 +63,10 @@ export default [
     description: 'Edit .env file in your preferred editor',
     action: () => {
       exec(
-        `${getConfigurations().preferredEditor} ${path.resolve(process.cwd(), '.env')}`
+        `${ConfigService.getConfigurations().preferredEditor} ${path.resolve(
+          process.cwd(),
+          '.env'
+        )}`
       );
     }
   }

@@ -6,7 +6,7 @@ import 'dotenv/config';
 import pc from 'picocolors';
 import commandCollection from './config/commands';
 import { createRc } from './config/createRc';
-import { refreshTokens } from './services/auth.service';
+import { AuthService } from './services/auth.service';
 
 async function initCli() {
   const program = new Command('tss');
@@ -28,7 +28,7 @@ async function initCli() {
   } catch (error) {
     const err = <Error>error;
     if (err.name === 'TokenExpiredError' || err.message.includes('expired')) {
-      await refreshTokens();
+      await AuthService.refreshTokens();
       return execSync(`tss ${program.args.join(' ')}`);
     }
     console.error(pc.red(`${err.name}: ${err.message}`));
