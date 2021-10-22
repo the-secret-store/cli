@@ -1,4 +1,5 @@
 import fs from 'fs';
+import gitDiff from 'git-diff';
 import ora from 'ora';
 import os from 'os';
 import path from 'path';
@@ -6,7 +7,7 @@ import pc from 'picocolors';
 import prompts, { PromptObject } from 'prompts';
 import { ProjectsApi } from '../api/projects.api';
 import { UserApi } from '../api/user.api';
-import { ClientError, FileNotFoundError } from '../errors';
+import { ApplicationError, ClientError, FileNotFoundError } from '../errors';
 import { exportEnvFromObject, exposeEnvAsObject } from '../utilities/envHandler';
 import prettyJson from '../utilities/prettyJson';
 import { getTokenPayload } from '../utilities/tokenHandler';
@@ -96,8 +97,7 @@ export class ProjectService {
       }
     } catch (error) {
       spinner.fail('Failed to initialize project.');
-      throw error;
-      // throw new ApplicationError('Failed to initialize project');
+      throw new ApplicationError('Failed to initialize project', error as Error);
     }
   }
 
@@ -125,6 +125,7 @@ export class ProjectService {
 
         exportEnvFromObject(currentLocalSecrets, dir, '.env.backup');
         exportEnvFromObject(secrets, dir);
+        console.log(gitDiff(prettyJson(currentLocalSecrets), prettyJson(secrets)));
       }
 
       spinner.succeed('Secrets are fetched and stored locally.');
