@@ -29,9 +29,10 @@ export async function sendLoginRequest(credentials: Credentials): Promise<TokenP
     console.log(pc.green(response.data.message));
     return response.data.tokens;
   } catch (err) {
+    const error = err as AxiosError;
     throw new AuthenticationError(
-      (<ApiResponseError>(<AxiosError>err).response).data.message,
-      err as Error
+      (error.response as ApiResponseError).data.message,
+      error
     );
   }
 }
@@ -49,9 +50,10 @@ export async function requestNewTokenPair(): Promise<TokenPair> {
     console.log(pc.green(response.data.message));
     return response.data.tokens;
   } catch (err) {
+    const error = err as AxiosError;
     throw new AuthenticationError(
-      (<ApiResponseError>(<AxiosError>err).response).data.message,
-      err as Error
+      (error.response as ApiResponseError).data.message,
+      error
     );
   }
 }
