@@ -1,7 +1,7 @@
-import { FileNotFoundError } from '../errors';
 import fs from 'fs';
 import path from 'path';
 import readline from 'readline';
+import { FileNotFoundError } from '../errors';
 
 export interface ENVObjectType {
   [key: string]: string | number;

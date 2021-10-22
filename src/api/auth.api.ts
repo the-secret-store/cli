@@ -1,9 +1,9 @@
+import axios, { AxiosError } from 'axios';
+import pc from 'picocolors';
 import instance from '../config/axios';
 import { AuthenticationError } from '../errors';
 import { getConfiguration } from '../services/config.service';
 import { ApiResponseError, ApiResponseSuccess } from './ApiResponse.interface';
-import axios, { AxiosError } from 'axios';
-import pc from 'picocolors';
 
 export interface Credentials {
   email: string;

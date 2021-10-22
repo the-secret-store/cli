@@ -1,3 +1,9 @@
+import fs from 'fs';
+import ora from 'ora';
+import os from 'os';
+import path from 'path';
+import pc from 'picocolors';
+import prompts, { PromptObject } from 'prompts';
 import {
   createNewProject,
   getSecretsFromStore,
@@ -9,12 +15,6 @@ import { exportEnvFromObject, exposeEnvAsObject } from '../utilities/envHandler'
 import prettyJson from '../utilities/prettyJson';
 import { getTokenPayload } from '../utilities/tokenHandler';
 import { getConfigurations } from './config.service';
-import fs from 'fs';
-import ora from 'ora';
-import os from 'os';
-import path from 'path';
-import pc from 'picocolors';
-import prompts, { PromptObject } from 'prompts';
 
 export async function createProject(dir: string) {
   const packageJsonFile = path.resolve(dir, 'package.json');

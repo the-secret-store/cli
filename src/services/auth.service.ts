@@ -1,3 +1,6 @@
+import ora from 'ora';
+import pc from 'picocolors';
+import prompts, { PromptObject } from 'prompts';
 import { requestNewTokenPair, sendLoginRequest } from '../api/auth.api';
 import { ApplicationError, AuthenticationError } from '../errors';
 import { getTokenPayload } from '../utilities/tokenHandler';
@@ -6,9 +9,6 @@ import {
   getConfiguration,
   removeConfigurations
 } from './config.service';
-import ora from 'ora';
-import pc from 'picocolors';
-import prompts, { PromptObject } from 'prompts';
 
 export function currentSessionDetails() {
   try {
