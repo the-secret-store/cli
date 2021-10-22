@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { ConfigService } from '../services/config.service';
 
-const instance = axios.create({ baseURL: process.env.BASE_URL });
+const BASE_URL = 'http://localhost:5000'; // in dev
+
+const instance = axios.create({ baseURL: BASE_URL });
 
 instance.defaults.headers.common['UserAgentToken'] =
   process.env.USER_AGENT_TOKEN || 'CLI';
