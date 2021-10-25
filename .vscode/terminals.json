@@ -2,13 +2,6 @@
   "autorun": true,
   "terminals": [
     {
-      "name": "zsh",
-      "description": "Terminal for use",
-      "focus": true,
-      "commands": ["npm link", "clear"],
-      "recycle": true
-    },
-    {
       "name": "tsc",
       "description": "TypeScript compiler in watch mode",
       "focus": false,
