@@ -1,4 +1,5 @@
 import fs from 'fs';
+import fsPromises from 'fs/promises';
 import gitDiff from 'git-diff';
 import ora from 'ora';
 import path from 'path';
@@ -69,7 +70,7 @@ export class ProjectService {
       const app_id = await ProjectsApi.createNewProject({ projectName, owner, scope });
 
       packageJson.default.tssProjectId = app_id;
-      fs.writeFileSync(packageJsonFile, prettyJson(packageJson.default));
+      await fsPromises.writeFile(packageJsonFile, prettyJson(packageJson.default));
 
       spinner.succeed(
         `Project initialized successfully. app_id: ${pc.underline(pc.cyan(app_id))}`
@@ -81,8 +82,8 @@ export class ProjectService {
       const gitIgnoreEditSpinner = ora('Updating gitignore...').start();
       try {
         const gitIgnoreFile = path.resolve(dir, '.gitignore');
-        const gitIgnore = fs.readFileSync(gitIgnoreFile);
-        fs.writeFileSync(
+        const gitIgnore = await fsPromises.readFile(gitIgnoreFile);
+        await fsPromises.writeFile(
           gitIgnoreFile,
           `
           ${gitIgnore}
