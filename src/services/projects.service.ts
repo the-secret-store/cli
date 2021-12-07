@@ -1,7 +1,6 @@
 import fs from 'fs';
 import gitDiff from 'git-diff';
 import ora from 'ora';
-import os from 'os';
 import path from 'path';
 import pc from 'picocolors';
 import prompts, { PromptObject } from 'prompts';
@@ -32,7 +31,7 @@ export class ProjectService {
       console.log('Project is already initialized.');
     }
 
-    const userDetails = getTokenPayload();
+    const userDetails = await getTokenPayload();
     const teams = (await UserApi.getTeams()).map(team => ({
       title: team.team_name,
       value: team.team_id
@@ -85,7 +84,10 @@ export class ProjectService {
         const gitIgnore = fs.readFileSync(gitIgnoreFile);
         fs.writeFileSync(
           gitIgnoreFile,
-          gitIgnore + os.EOL + '.env' + os.EOL + '.env.backup'
+          `
+          ${gitIgnore}
+          .env
+          .env.backup`
         );
         gitIgnoreEditSpinner.succeed('.gitignore file has been updated.');
         console.log('Remember to commit the changes.');
@@ -111,7 +113,7 @@ export class ProjectService {
 
       const secrets = await ProjectsApi.getSecretsFromStore(tssProjectId);
 
-      if (ConfigService.getConfigurations().noOfLocalBackups == 0) {
+      if ((await ConfigService.getConfiguration('noOfLocalBackups')) == 0) {
         exportEnvFromObject(secrets, dir);
       }
 

@@ -7,9 +7,9 @@ import { getTokenPayload } from '../utilities/tokenHandler';
 import { ConfigService } from './config.service';
 
 export class AuthService {
-  static currentSessionDetails() {
+  static async currentSessionDetails() {
     try {
-      const { display_name, unverified } = getTokenPayload();
+      const { display_name, unverified } = await getTokenPayload();
       console.log(`Logged in as ${display_name}.`);
       if (unverified)
         console.log(
@@ -23,7 +23,7 @@ export class AuthService {
   }
 
   static async login() {
-    if (ConfigService.getConfiguration('authToken')) {
+    if (await ConfigService.getConfiguration('authToken')) {
       console.log('You are already logged in.');
       return;
     }
@@ -53,7 +53,7 @@ export class AuthService {
       });
       if (!authToken) throw new AuthenticationError('Authentication failure');
 
-      ConfigService.addConfigurations({ authToken, refreshToken });
+      await ConfigService.addConfigurations({ authToken, refreshToken });
       spinner.succeed('Log in successful.');
     } catch (err) {
       spinner.fail('Login failed');
@@ -61,8 +61,8 @@ export class AuthService {
     }
   }
 
-  static logout() {
-    ConfigService.removeConfigurations('authToken', 'refreshToken');
+  static async logout() {
+    await ConfigService.removeConfigurations('authToken', 'refreshToken');
     console.log('Logged out.');
   }
 
@@ -70,7 +70,7 @@ export class AuthService {
     const spinner = ora('Refreshing tokens...').start();
     try {
       const { authToken, refreshToken } = await AuthApi.requestNewTokenPair();
-      ConfigService.addConfigurations({ authToken, refreshToken });
+      await ConfigService.addConfigurations({ authToken, refreshToken });
       spinner.succeed('Tokens refreshed.');
     } catch (error) {
       spinner.fail('Failed to refresh tokens.');

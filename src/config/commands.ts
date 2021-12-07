@@ -49,9 +49,9 @@ export default [
   {
     name: 'configure',
     description: 'Edit the .tssrc file in your preferred editor',
-    action: () => {
+    action: async () => {
       exec(
-        `${ConfigService.getConfigurations().preferredEditor} ${path.resolve(
+        `${await ConfigService.getConfiguration('preferredEditor')} ${path.resolve(
           homedir(),
           '.tssrc'
         )}`
@@ -61,9 +61,9 @@ export default [
   {
     name: 'edit',
     description: 'Edit .env file in your preferred editor',
-    action: () => {
+    action: async () => {
       exec(
-        `${ConfigService.getConfigurations().preferredEditor} ${path.resolve(
+        `${await ConfigService.getConfiguration('preferredEditor')} ${path.resolve(
           process.cwd(),
           '.env'
         )}`

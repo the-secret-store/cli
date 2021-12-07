@@ -43,7 +43,7 @@ export class AuthApi {
       const ins = axios.create({
         baseURL: process.env.BASE_URL,
         headers: {
-          Authorization: `Bearer ${ConfigService.getConfiguration('refreshToken')}`
+          Authorization: `Bearer ${await ConfigService.getConfiguration('refreshToken')}`
         }
       });
 

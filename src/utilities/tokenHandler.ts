@@ -8,10 +8,10 @@ export interface TokenPayload extends JwtPayload {
   unverified: boolean;
 }
 
-export function getTokenPayload() {
+export async function getTokenPayload() {
   try {
-    const token = ConfigService.getConfiguration('authToken');
-    const details: TokenPayload = <TokenPayload>jwt.decode(token);
+    const token = await ConfigService.getConfiguration('authToken');
+    const details: TokenPayload = <TokenPayload>(jwt.decode(token) as unknown);
 
     return details;
   } catch (error) {
